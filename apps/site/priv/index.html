@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js"></script>
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div id="root">
+   <div v-for="key in filter_keys"> 
+    <label  v-bind:for="key" class="label" v-text="key"></label> 
+    <input  v-bind:id="key" type="search" v-model="filters[key]" v-on:change="onSubmit"></input>
+   </div>
+   <select v-model="selected" v-on:change="onSubmit">
+      <option value="">No sort<option>
+      <option>type<option>
+      <option>reported_by<option>
+      <option>month<option>
+      <option>lsoa_name<option>
+      <option>lsoa_code<option>
+      <option>longitude<option>
+      <option>location<option>
+      <option>latitude<option>
+      <option>last_outcome_category<option>
+      <option>falls_within<option>
+      <option>context<option>
+      <option>alias<option>
+    </select> 
+    <table>
+      <th v-for="filter in filter_keys" v-text="filter"></th>
+      <tr v-for="crime in crimes">
+        <td v-for="(value, key) in crime" v-text="value"></td>
+      </tr>
+   </table> 
+  </div>
+  <script>
+    new Vue({
+      el: '#root',
+      data: {
+        filter_keys: ["type", "reported_by", "month", "lsoa_name", "lsoa_code", "longitude", "location", "latitude", "last_outcome_category", "falls_within", "context", "alias"],
+        crimes: [],
+        filters: {
+          type: '',
+          reported_by: '',
+          month: '',
+          lsoa_name: '',
+          lsoa_code: '',
+          longitude: '',
+          location: '',
+          latitiude: '',
+          last_outcome_category: '',
+          falls_within: '',
+          context: '',
+          alias: ''
+        },
+         selected: ''
+      },
+      mounted() {
+        axios.get('/crimes').then(response => this.crimes = response.data)
+      },
+      methods: {
+        onSubmit() {
+        params = new URLSearchParams()
+        for (var x in this.filters) {
+           if(this.filters[x] != '') { params.append(x, this.filters[x]) }
+        } 
+        if(this.selected != '') {params.append("sort", this.selected)}
+        axios.get('/crimes', {params: params}).then(response => this.crimes = response.data)
+        }
+      }
+    })
+  </script>
+</body>
+</html>
