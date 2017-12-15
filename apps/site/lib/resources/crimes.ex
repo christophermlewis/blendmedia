@@ -30,6 +30,6 @@ defmodule Site.Resources.Crimes do
   defp sort({query, %{sort: param}}) do
     Crime.sort(param |> String.to_atom, query) 
   end
-  defp sort({query, param}), do: query
+  defp sort({query, _}), do: query
   
 end

@@ -14,6 +14,7 @@ To begin run
 To Run importer
 
      cd apps/importer
+     mix ecto.create
      mix ecto.migrate
      iex -S mix
      Importer.CrimeFileLoader.import("a directory")

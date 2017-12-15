@@ -13,7 +13,7 @@ defmodule Site.Application do
         }
       ])
 
-    {ok, _} = :cowboy.start_clear(:listener,
+    {:ok, _} = :cowboy.start_clear(:listener,
         [port: 8000],
         %{env: %{dispatch: dispatch}}
     )
